@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <type_traits>
 #include <vector>
-
+#include <optional>
 /** STUDENT_TODO: You will need to include a relevant header file here! */
 
 #include "autograder/utils.hpp"
@@ -20,7 +20,15 @@ struct Course
   std::string title;
   std::string number_of_units;
   std::string quarter;
-
+  bool has_value(){
+    if(title!="0"&&number_of_units!="0"&&quarter!="0")
+    {
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
   /**
    * You don't have to ignore this anymore! We're defining the `==` operator for
    * the Course struct.
@@ -52,10 +60,19 @@ public:
    * @param course_title The title of the course to find.
    * @return You will need to figure this out!
    */
-  FillMeIn find_course(std::string course_title)
+  Course find_course(std::string course_title)
   {
     /* STUDENT_TODO: Implement this method! You will need to change the return
      * type. */
+    auto loc=std::find_if(courses.begin(),courses.end(),[course_title](Course course)->bool {
+      return course.title==course_title;
+    });
+    if(loc!=courses.end()){
+      return *loc;
+    }
+    else{
+      return {"0","0","0"};
+    }
   }
 
 private:
@@ -80,8 +97,15 @@ main(int argc, char* argv[])
     STUDENT_TODO: Populate the output string with the right information to print
     Please pay special attention to the README here
     ********************************************************/
-
-    std::string output = /* STUDENT_TODO */
+   std::string output;
+   if (course.has_value()) {
+      output= "Found course: " + course.title + ","
+                + course.number_of_units + "," + course.quarter + "\n";
+    } 
+    else {
+      output= "Course not found.\n";
+    }
+     /* STUDENT_TODO */
 
     /********************************************************
      DO NOT MODIFY ANYTHING BELOW THIS LINE PLEASE

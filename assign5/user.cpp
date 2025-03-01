@@ -58,8 +58,53 @@ void User::set_friend(size_t index, const std::string& name)
 {
   _friends[index] = name;
 }
-
+std::string* User::get_friend() const
+{
+  return _friends;
+}
+size_t User::get_capacity() const
+{
+  return _capacity;
+}
 /** 
  * STUDENT TODO:
  * The definitions for your custom operators and special member functions will go here!
  */
+std::ostream& operator<<(std::ostream& os, const User& user) {
+  os << "User(name=" << user.get_name() << ", friends=[";
+  if (user.size() >= 1) {
+      for (size_t index = 0; index < user.size() - 1; index++) {
+          os << user.get_friend()[index] << ", ";
+      }
+      os << user.get_friend()[user.size() - 1];
+  }
+  os << "])"; // Always close the list
+  return os;
+}
+
+User::~User(){//destructor
+  delete []_friends;
+}
+// Copy Constructor
+User::User(const User& user) 
+    : _name(user._name), _size(user._size), _capacity(user._capacity) {
+    _friends = new std::string[_capacity];
+    std::copy(user._friends, user._friends + _size, _friends);
+}
+
+// Copy Assignment
+User& User::operator=(const User& user) {
+    if (this != &user) {
+        delete[] _friends;
+        _name = user._name;
+        _size = user._size;
+        _capacity = user._capacity;
+        _friends = new std::string[_capacity];
+        std::copy(user._friends, user._friends + _size, _friends);
+    }
+    return *this;
+}
+
+
+
+
