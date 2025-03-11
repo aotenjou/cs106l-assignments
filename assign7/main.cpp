@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "unique_ptr.h"
@@ -55,15 +56,13 @@ template <typename T> struct ListNode {
   if (values.empty()) {
     return nullptr; 
   }
-  auto head = cs106l::make_unique<ListNode<T>>(values[0]);
-  auto current = &head;
-  for (size_t i = 1; i < values.size(); ++i) {
-    auto node = cs106l::make_unique<ListNode<T>>(values[i]);
-    (*current)->next = std::move(node);
-    current = &(*current)->next;
+  auto head = cs106l::make_unique<ListNode<T>>(values[values.size()-1]);
+  for (int i = values.size()-2; i >= 0; --i) {
+    auto temp=cs106l::make_unique<ListNode<T>>(values[i]);
+    temp->next=std::move(head);
+    head=std::move(temp);
   }
-
-  return head; 
+  return head;
 }
 
 /**

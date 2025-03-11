@@ -9,12 +9,13 @@
 
 #include <fstream>
 #include <iostream>
+#include <ostream>
 #include <queue>
 #include <set>
 #include <string>
 #include <unordered_set>
 
-std::string kYourName = "STUDENT TODO"; // Don't forget to change this!
+std::string kYourName = "A A"; // Don't forget to change this!
 
 /**
  * Takes in a file name and returns a set containing all of the applicant names as a set.
@@ -29,6 +30,13 @@ std::string kYourName = "STUDENT TODO"; // Don't forget to change this!
  */
 std::set<std::string> get_applicants(std::string filename) {
   // STUDENT TODO: Implement this function.
+  std::ifstream ifs(filename);
+  std::string stu;
+  std::set<std::string> res;
+  while(std::getline(ifs,stu)){
+    res.emplace(stu);
+  }
+  return res;
 }
 
 /**
@@ -41,6 +49,30 @@ std::set<std::string> get_applicants(std::string filename) {
  */
 std::queue<const std::string*> find_matches(std::string name, std::set<std::string>& students) {
   // STUDENT TODO: Implement this function.
+  std::queue<const std::string*> res;
+  std::string initials;
+    initials += name[0]; // First initial
+    size_t spacePos = name.find(' ');
+    if (spacePos != std::string::npos && spacePos + 1 < name.size()) {
+        initials += name[spacePos + 1]; // Second initial
+    }
+
+    // Find names with the same initials
+    for (const auto& student : students) {
+        if (student.empty()) continue;
+
+        std::string studentInitials;
+        studentInitials += student[0]; // First initial
+        size_t studentSpacePos = student.find(' ');
+        if (studentSpacePos != std::string::npos && studentSpacePos + 1 < student.size()) {
+            studentInitials += student[studentSpacePos + 1]; // Second initial
+        }
+
+        if (studentInitials == initials) {
+            res.push(&student); // Push a pointer to the matching name
+        }
+    }
+  return res;
 }
 
 /**
@@ -55,6 +87,7 @@ std::queue<const std::string*> find_matches(std::string name, std::set<std::stri
  */
 std::string get_match(std::queue<const std::string*>& matches) {
   // STUDENT TODO: Implement this function.
+  return "NO MATCHES FOUND.";
 }
 
 /* #### Please don't remove this line! #### */
